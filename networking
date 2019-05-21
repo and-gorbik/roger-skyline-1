@@ -1,0 +1,13 @@
+echo "network configuration.."
+
+echo -e "source /etc/network/interfaces.d/*\n\n
+auto lo\n
+iface lo inet loopback\n\n
+
+auto enp0s3\n
+iface enp0s3 inet static\n
+address `ip a ls enp0s3 | grep "inet " | perl -lane 'print $F[1] =~ /^([^\/]+)\//'`
+netmask 255.255.255.252\n
+gateway `ip r | grep default | perl -lane 'print $F[2]'`" > /etc/network/interfaces
+
+service networking restart
