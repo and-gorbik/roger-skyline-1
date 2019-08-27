@@ -1,6 +1,0 @@
-# создание non-root пользователя с именем remote и паролем password
-useradd remote -s /bin/bash -m # по умолчанию создается также группа с соответствующим именем
-echo -e "password\npassword" | (passwd remote) 
-
-# редактирование /etc/sudoers
-echo -e "remote\tALL=(ALL:ALL)\tALL" >> /etc/sudoers
