@@ -50,8 +50,14 @@ cp notifier.sh /root/notifier.sh
 chmod +x /root/notifier.sh
 echo "@daily /root/notifier.sh" >> /etc/crontab
 
-
-# echo "root: $NAME"  >> /etc/aliases
-# newaliases
+echo "> mail setup"
+read
+grep -v "root:" /etc/aliases > aliases && mv aliases /etc/aliases
+echo "root: $NAME"  >> /etc/aliases
+newaliases
+touch /var/mail/$NAME
+chown $NAME /var/mail/$NAME
+bash notifier.sh
+cat /var/mail/$NAME
 
 echo "Done!"
