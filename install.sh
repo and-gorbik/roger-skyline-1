@@ -15,7 +15,7 @@ apt-get upgrade -y >> /var/log/update_script.log
 echo "> installation of all necessary packages"
 read
 while read PKG
-    do apt-get install -y $PKG
+    do apt-get install -y $PKG >> /var/log/update_script.log
 done < requirements
 
 echo "> adding a new sudo user"
@@ -36,7 +36,7 @@ service sshd restart
 echo "> services disabling"
 read
 while read SERVICE
-    do systemctl disable $SERVICE
+    do systemctl disable $SERVICE 1>/dev/null 2>/dev/null
 done < disabled_services
 
 echo "> crontab setup"
