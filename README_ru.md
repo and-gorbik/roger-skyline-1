@@ -1,4 +1,4 @@
-# roger-skyline-1
+# Roger-skyline-1
 Проект, автоматизирующий настройку системы Debian для использования ее в качестве веб-сервера, а также настройку самого web-сервера.
 
 ## Содержание
@@ -33,7 +33,7 @@
 		>Это делается в основном окне VirtualBox, в разделе Global Tools -> параметры сети vboxnet0
 
 ### Установка системы <a id=osinstall></a>
-- Образ: [Debian 9.9.0-amd64-netinst.iso](https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-9.9.0-amd64-netinst.iso)
+- Образ: `debian-10.1.0-amd64-netinst`
 - Non-root пользователь:
 	- логин: sjacelyn
 	- пароль: 12345
@@ -47,42 +47,49 @@
 	- стандартные системные утилиты
 - Установить  GRUB: да
 
-### Обновление всех установленных пакетов
+
+```
+Все действия выполнять от root'a и из директории с проектом
+```
+
+## Настройка сети <a id=network></a>
+- Отредактировать файл **/etc/network/interfaces**:
+```bash
+cp interfaces /etc/network/interfaces
+```
+- Перезапустить сервис **networking**:
+```bash
+service networking restart
+```
+- Проверить соединения с хост-машиной:
+```bash
+ping -c 3 192.168.56.1
+```
+
+## Создание ключа и проброс его на VM <a id=key></a>
+- Сгенерировать ключ (на хосте):
+```bash
+ssh-keygen -f roger-key
+```
+- Скопировать ключ на VM для пользователя `sjacelyn`:
+```bash
+ssh-copy-id -i roger-key.pub sjacelyn@192.168.56.2
+```
+- Ввести пароль (12345)
+
+Теперь появилась возможность заходить по ssh на VM без ввода пароля.
+
+## Настройка системы <a id=os></a>
+
+### Обновление всех установленных пакетов <a id=pkgupdate></a>
 ```bash
 su
 apt-get update && apt-get upgrade
 ```
 
-### Настройка сети на виртуалке
-```bash
-su
-(cat << NETWORK
-# virtual host adapter"
-auto enp0s8
-iface enp0s8 inet static
-address 192.168.56.2
-netmask 255.255.255.252
-NETWORK
-) >> /etc/network/interfaces
-service networking restart
-# проверка
-ping -c 3 192.168.56.1
-```
+### Создание sudoer'a <a id=sudo></a>
 
-### Создание нового пользователя и добавление его в sudoers
-```bash
-su
-# username: remote
-# password: 12345
-useradd remote -s /bin/bash -m
-echo -e "12345\n12345" | (passwd remote)
-apt-get install sudo -y
-# добавление пользователя в sudoers
-echo -e "remote\tALL=(ALL:ALL)\tALL" >> /etc/sudoers
-# проверка
-su - remote
-sudo apt-get install vim -y
-```
+---
 
 ### Настройка ssh на хосте
 ```bash
