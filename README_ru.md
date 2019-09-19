@@ -8,7 +8,7 @@
 - [Настройка сети](#network)
 - [Создание ключа и проброс его на VM](#key)
 - [Настройка системы](#os)
-	- [Обновление всех установленных пакетов](#pkgupdate)
+	- [Обновление и установка пакетов](#pkgupdate)
 	- [Создание sudoer'a](#sudo)
 	- [Настройка ssh](#ssh)
 	- [Отключение ненужных сервисов](#servicesdisabling)
@@ -81,32 +81,49 @@ ssh-copy-id -i roger-key.pub sjacelyn@192.168.56.2
 
 ## Настройка системы <a id=os></a>
 
-### Обновление всех установленных пакетов <a id=pkgupdate></a>
+### Обновление и установка пакетов <a id=pkgupdate></a>
 ```bash
 su
-apt-get update && apt-get upgrade
+apt-get update && apt-get upgrade -y
+apt-get install vim sudo mailutils -y
 ```
 
 ### Создание sudoer'a <a id=sudo></a>
-
----
-
-### Настройка ssh на хосте
 ```bash
-ssh-keygen -f rsa_key
-ssh-copy-id -i rsa_key.pub remote@192.168.56.2
+echo -e "sjacelyn\tALL=(ALL:ALL)\tALL" >> /etc/sudoers
 ```
 
-### Настройка ssh на виртуалке
+### Настройка ssh <a id=ssh></a>
+- Изменить файл `/etc/ssh/sshd_config`: 
 ```bash
-su
-(cat << SSH
-PermitRootLogin no
-PasswordAuthentication no
-Port 2222
-SSH
-) >> /etc/ssh/sshd_config
+cat sshd_config >> /etc/ssh/sshd_config
+```
+- Перезапустить сервис `sshd`:
+```bash
 service sshd restart
 ```
 Теперь с хоста можно зайти по ssh, используя команду:
-`ssh remote@192.168.56.2 -p 2222 -i rsa_key`
+`ssh sjacelyn@192.168.56.2 -p 2222 -i rsa_key`
+
+### Отключение ненужных сервисов <a id=servicesdisabling></a>
+```bash
+while read SERVICE
+	do systemctl disable $SERVICE
+done < disabled_services
+```
+
+### Настройка crontab <a id=crontab></a>
+```bash
+cp update.sh /root/update.sh
+chmod +x /root/update.sh
+echo "0 4 */7 * * /root/update.sh" >> /etc/crontab
+echo "@reboot /root/update.sh" >> /etc/crontab
+
+cp notifier.sh /root/notifier.sh
+chmod +x /root/notifier.sh
+echo "@daily /root/notifier.sh" >> /etc/crontab
+```
+
+### Настройка уведомлений <a id=mail></a>
+
+
