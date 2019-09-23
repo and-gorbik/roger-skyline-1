@@ -77,7 +77,6 @@ ssh-copy-id -i roger-key.pub sjacelyn@192.168.56.2
 ```
 - Ввести пароль (12345)
 
-Теперь появилась возможность заходить по ssh на VM без ввода пароля.
 
 ## Настройка системы <a id=os></a>
 
@@ -103,7 +102,7 @@ cat sshd_config >> /etc/ssh/sshd_config
 service sshd restart
 ```
 Теперь с хоста можно зайти по ssh, используя команду:
-`ssh sjacelyn@192.168.56.2 -p 2222 -i rsa_key`
+`ssh sjacelyn@192.168.56.2 -p 2222 -i roger-key`
 
 ### Отключение ненужных сервисов <a id=servicesdisabling></a>
 ```bash
@@ -124,6 +123,8 @@ chmod +x /root/notifier.sh
 echo "@daily /root/notifier.sh" >> /etc/crontab
 ```
 
-### Настройка уведомлений <a id=mail></a>
-
-
+### Настройка почты <a id=mail></a>
+```bash
+touch /var/mail/sjacelyn
+chown sjacelyn /var/mail/sjacelyn
+```
