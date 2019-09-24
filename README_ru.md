@@ -128,3 +128,33 @@ echo "@daily /root/notifier.sh" >> /etc/crontab
 touch /var/mail/sjacelyn
 chown sjacelyn /var/mail/sjacelyn
 ```
+
+## Настройка сервера
+
+### Создание SSL сертификата и ключа
+
+```bash
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+-keyout /etc/ssl/private/nginx-selfsigned.key \
+-out /etc/ssl/certs/nginx-selfsigned.crt
+```
+Эта команда создает самоподписанный сертификат (`/etc/ssl/certs/nginx-selfsigned.crt`) вместе с rsa-ключом длины 2048 бит (`/etc/ssl/private/nginx-selfsigned.key`), действительные в течение 365 дней.
+Далее требуется заполнить информацию в сертификате:
+
+| Поле | Значение |
+| --- | --- |
+| Country Name | RU |
+| State |  |
+| City | Moscow |
+| Company | School21 |
+| Section |  |
+| Common Name | 192.168.56.2 |
+
+Нужны также специальные ключи Диффи-Хеллмана для поддержки PFS*:
+```bash
+openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+```
+> \*Совершенная прямая секретность (англ. Perfect forward secrecy, PFS) — свойство некоторых протоколов согласования ключа, которое гарантирует, что сессионные ключи, полученные при помощи набора ключей долговременного пользования, не будут скомпрометированы при компрометации одного из долговременных ключей. (wikipedia)
+
+### Настройка nginx с подддержкой SSL сертификатов
+
