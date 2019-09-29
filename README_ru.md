@@ -169,5 +169,12 @@ cp ssl-params.conf /etc/nginx/snippets/ssl-params.conf
 ```bash
 cp nginx.conf /etc/nginx/sites-available/default 
 ```
+Создать отдаваемую сервером страницу:
+```bash
+cp login.html /home/sjacelyn/www/login.html
+```
+
+Теперь сервер может отдавать статические html-странички из директории `/home/sjacelyn/www` по протоколу https.
+Однако, т.к. сертификат самоподписанный, браузер выдаст предупреждение.
 
 
