@@ -166,13 +166,18 @@ cp self-signed.conf /etc/nginx/snippets/self-signed.conf
 ```bash
 cp ssl-params.conf /etc/nginx/snippets/ssl-params.conf 
 ```
-Создать конфигурацию серверу:
+Создать конфигурацию серверу и проверить правильность конфига:
 ```bash
-cp nginx.conf /etc/nginx/sites-available/default 
+cp nginx.conf /etc/nginx/sites-available/default
+nginx -t
 ```
 Создать отдаваемую сервером страницу:
 ```bash
 cp login.html /home/sjacelyn/www/login.html
+```
+Перезапустить nginx:
+```bash
+service nginx restart
 ```
 
 Теперь сервер может отдавать статические html-странички из директории `/home/sjacelyn/www` по протоколу https.
