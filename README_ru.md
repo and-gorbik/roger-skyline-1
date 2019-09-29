@@ -157,4 +157,17 @@ openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 > \*Совершенная прямая секретность (англ. Perfect forward secrecy, PFS) — свойство некоторых протоколов согласования ключа, которое гарантирует, что сессионные ключи, полученные при помощи набора ключей долговременного пользования, не будут скомпрометированы при компрометации одного из долговременных ключей. (wikipedia)
 
 ### Настройка nginx с подддержкой SSL сертификатов
+Создать сниппет, показывающий папку, где лежат сертификат и ключ:
+```bash
+cp self-signed.conf /etc/nginx/snippets/self-signed.conf
+```
+Создать сниппет с настройками сертификата:
+```bash
+cp ssl-params.conf /etc/nginx/snippets/ssl-params.conf 
+```
+Создать конфигурацию серверу:
+```bash
+cp nginx.conf /etc/nginx/sites-available/default 
+```
+
 
