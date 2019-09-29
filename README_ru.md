@@ -187,7 +187,7 @@ service nginx restart
 
 ## Настройка защиты <a id=protection></a>
 
-## Полезные ссылки <a id=srcs>/</a>
+## Полезные ссылки <a id=srcs></a>
 - [Типы сетей в virtualbox](https://techlist.top/virtualbox-network-settings-part-1/)
 - [Настройка iptables](https://serveradmin.ru/nastroyka-iptables-v-centos-7/)
 - [Настройка nginx с самоподписанным сертификатом](https://abc-server.com/ru/blog/administration/creating-ssl-for-nginx-in-ubuntu-1604/)
