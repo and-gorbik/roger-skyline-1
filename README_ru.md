@@ -17,11 +17,11 @@
 - [Настройка Web-сервера](#web)
 	- [Создание ssl-сертификата и ключа](#ssl)
 	- [Настройка nginx с подддержкой SSL сертификатов](#nginx)
-	
 - [Настройка защиты](#protection)
 	- [Iptables](#iptables)
 	- [Защита от сканирования портов](#noscan)
 	- [Защита от DDOS](#noddos)
+- [Полезные ссылки](#srcs)
 
 ## Настройка VM <a id=VM></a>
 
@@ -184,3 +184,11 @@ service nginx restart
 Однако, т.к. сертификат самоподписанный, браузер выдаст предупреждение.
 
 Проверить работу сервера можно, набрав в браузере: `https://192.168.56.2/login.html`
+
+## Настройка защиты <a id=protection></a>
+
+## Полезные ссылки <a id=srcs>/</a>
+- [Типы сетей в virtualbox](https://techlist.top/virtualbox-network-settings-part-1/)
+- [Настройка iptables](https://serveradmin.ru/nastroyka-iptables-v-centos-7/)
+- [Настройка nginx с самоподписанным сертификатом](https://abc-server.com/ru/blog/administration/creating-ssl-for-nginx-in-ubuntu-1604/)
+- [Красивая страничка логина](https://codepen.io/colorlib/pen/rxddKy)
