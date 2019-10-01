@@ -186,9 +186,25 @@ service nginx restart
 Проверить работу сервера можно, набрав в браузере: `https://192.168.56.2/login.html`
 
 ## Настройка защиты <a id=protection></a>
+### Iptables <a id=iptables></a>
+Применить правила для iptables и сохранить их в `/etc/iptables_rules`:
+```bash
+chmod 740 iptables.sh
+sh iptables.sh
+iptables-save > /etc/iptables_rules
+```
+Настроить загрузку правил при старте системы:
+```bash
+echo "pre-up iptables-restore < /etc/iptables_rules" >> /etc/network/interfaces 
+```
+
+### Защита от сканирования портов <a id=noscan></a>
+### Защита от DDOS <a id=noddos></a>
+
 
 ## Полезные ссылки <a id=srcs></a>
 - [Типы сетей в virtualbox](https://techlist.top/virtualbox-network-settings-part-1/)
 - [Настройка iptables](https://serveradmin.ru/nastroyka-iptables-v-centos-7/)
+- [Подробно об iptables](https://www.opennet.ru/docs/RUS/iptables/#STATEMACHINE)
 - [Настройка nginx с самоподписанным сертификатом](https://abc-server.com/ru/blog/administration/creating-ssl-for-nginx-in-ubuntu-1604/)
 - [Красивая страничка логина](https://codepen.io/colorlib/pen/rxddKy)
