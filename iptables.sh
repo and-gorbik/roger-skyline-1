@@ -12,6 +12,22 @@ iptables -X
 iptables -t nat -X
 iptables -t mangle -X
 
+# deny invalid packages
+
+# deny bad tcp packages
+
+# deny spoofing
+
+# deny portscan
+iptables -A INPUT -m recent --rcheck --seconds 120 --name FUCKOFF -j DROP
+iptables -A INPUT -p tcp -m multiport ! --dports $SSH_PORT,80,443 -m recent --set --name FUCKOFF -j DROP
+
+# enable dos protection
+iptables -N brute_check
+iptables -A brute_check -m recent --update --seconds 60 --hitcount 3 -j DROP
+iptables -A brute_check -m recent --set -j ACCEPT
+iptables -A INPUT -m conntrack --ctstate NEW -p tcp -m multiport ! --dports $SSH_PORT,80,443 -j brute_check
+
 # set default rules
 iptables -P FORWARD DROP
 iptables -P INPUT DROP
