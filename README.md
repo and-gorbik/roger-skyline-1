@@ -174,7 +174,7 @@ nginx -t
 ```
 Создать отдаваемую сервером страницу:
 ```bash
-cp login.html /home/sjacelyn/www/login.html
+cp -r www /home/sjacelyn/.
 ```
 Перезапустить nginx:
 ```bash
