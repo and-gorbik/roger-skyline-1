@@ -221,5 +221,7 @@ iptables -A INPUT -m conntrack --ctstate NEW -p tcp -m multiport ! --dports $SSH
 - [Типы сетей в virtualbox](https://techlist.top/virtualbox-network-settings-part-1/)
 - [Настройка iptables](https://serveradmin.ru/nastroyka-iptables-v-centos-7/)
 - [Подробно об iptables](https://www.opennet.ru/docs/RUS/iptables/#STATEMACHINE)
+- [Как можно защититься от сканирования портов](https://www.opennet.ru/tips/info/2267.shtml)
+- [Еще о разных защитах при помощи iptables](https://xakep.ru/2010/11/02/53653/)
 - [Настройка nginx с самоподписанным сертификатом](https://abc-server.com/ru/blog/administration/creating-ssl-for-nginx-in-ubuntu-1604/)
 - [Красивая страничка логина](https://codepen.io/colorlib/pen/rxddKy)
