@@ -85,7 +85,7 @@ ssh-copy-id -i roger-key.pub sjacelyn@192.168.56.2
 ```bash
 su
 apt-get update && apt-get upgrade -y
-apt-get install vim sudo mailutils -y
+apt-get install vim sudo mailutils nginx openssl -y
 ```
 
 ### Создание sudoer'a <a id=sudo></a>
@@ -122,6 +122,7 @@ echo "@reboot /root/update.sh" >> /etc/crontab
 cp notifier.sh /root/notifier.sh
 chmod +x /root/notifier.sh
 echo "@daily /root/notifier.sh" >> /etc/crontab
+systemctl enable cron
 ```
 
 ### Настройка почты <a id=mail></a>
