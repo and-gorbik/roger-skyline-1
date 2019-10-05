@@ -116,12 +116,12 @@ done < disabled_services
 ```bash
 cp update.sh /root/update.sh
 chmod +x /root/update.sh
-echo "0 4 */7 * * /root/update.sh" >> /etc/crontab
-echo "@reboot /root/update.sh" >> /etc/crontab
+echo "0 4 */7 * * root /root/update.sh" >> /etc/crontab
+echo "@reboot root /root/update.sh" >> /etc/crontab
 
 cp notifier.sh /root/notifier.sh
 chmod +x /root/notifier.sh
-echo "@daily /root/notifier.sh" >> /etc/crontab
+echo "@daily root /root/notifier.sh" >> /etc/crontab
 systemctl enable cron
 ```
 
