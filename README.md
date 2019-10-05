@@ -116,12 +116,12 @@ done < disabled_services
 ```bash
 cp update.sh /root/update.sh
 chmod +x /root/update.sh
-echo "0 4 */7 * * /root/update.sh" >> /etc/crontab
-echo "@reboot /root/update.sh" >> /etc/crontab
+echo "0 4 */7 * * root /root/update.sh" >> /etc/crontab
+echo "@reboot root /root/update.sh" >> /etc/crontab
 
 cp notifier.sh /root/notifier.sh
 chmod +x /root/notifier.sh
-echo "@daily /root/notifier.sh" >> /etc/crontab
+echo "@daily root /root/notifier.sh" >> /etc/crontab
 systemctl enable cron
 ```
 
@@ -174,7 +174,7 @@ nginx -t
 ```
 Создать отдаваемую сервером страницу:
 ```bash
-cp login.html /home/sjacelyn/www/login.html
+cp -r www /home/sjacelyn/.
 ```
 Перезапустить nginx:
 ```bash
@@ -202,7 +202,7 @@ echo "pre-up iptables-restore < /etc/iptables_rules" >> /etc/network/interfaces
 ### Защита от сканирования портов <a id=noscan></a>
 Добавить в iptables следующие правила:
 ```bash
-iptables -A INPUT -m recent --seconds 120 --name fuckoff -j DROP
+iptables -A INPUT -m recent --rcheck --seconds 120 --name fuckoff -j DROP
 iptables -A INPUT -p tcp -m multiport ! --dports $SSH_PORT,80,443 -m recent --set --name fuckoff -j DROP
 ```
 Любой пакет, идущий не на 2222,80,443 порты, добавляет его отправителя (ip-адрес) в бан-лист с именем `fuckoff`. Следующие 120 секунд будут блокироваться все пакеты, исходящие с данного ip.
@@ -213,7 +213,7 @@ iptables -A INPUT -p tcp -m multiport ! --dports $SSH_PORT,80,443 -m recent --se
 iptables -N brute_check
 iptables -A brute_check -m recent --update --seconds 60 --hitcount 3 -j DROP
 iptables -A brute_check -m recent --set -j ACCEPT
-iptables -A INPUT -m conntrack --ctstate NEW -p tcp -m multiport ! --dports $SSH_PORT,80,443 -j brute_check
+iptables -A INPUT -m conntrack --ctstate NEW -p tcp -m multiport --dports $SSH_PORT,80,443 -j brute_check
 ```
 Эти правила сработают, если злоумышленник уже знает (догадался), какие порты открыты, и пытается огромным количеством запросов на эти порты исчерпать ресурсы сервера.
 Здесь создается отдельная цепочка `brute_check` для проверки соединений. Далее блокируются адрес, если за последнюю минуту он инициировал более трех соединений. Если адрес "нормальный", то соединение разрешается, а адрес заносится в список. В цепочку `brute_check` попадает любой, кто пытается подключиться к портам $SSH_PORT,80,443.
