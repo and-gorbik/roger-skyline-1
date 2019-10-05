@@ -13,14 +13,8 @@ iptables -t nat -X
 iptables -t mangle -X
 
 # deny portscan
-iptables -A INPUT -m recent --rcheck --seconds 120 --name FUCKOFF -j DROP
-iptables -A INPUT -p tcp -m multiport ! --dports $SSH_PORT,80,443 -m recent --set --name FUCKOFF -j DROP
-
-# enable dos protection
-iptables -N brute_check
-iptables -A brute_check -m recent --update --seconds 60 --hitcount 3 -j DROP
-iptables -A brute_check -m recent --set -j ACCEPT
-iptables -A INPUT -m conntrack --ctstate NEW -p tcp -m multiport ! --dports $SSH_PORT,80,443 -j brute_check
+iptables -A INPUT -m recent --rcheck --seconds 120 --name fuckoff -j DROP
+iptables -A INPUT -p tcp -m multiport ! --dports $SSH_PORT,80,443 -m conntrack --ctstate NEW  -m recent --set --name fuckoff -j DROP
 
 # set default rules
 iptables -P FORWARD DROP
@@ -31,11 +25,11 @@ iptables -P OUTPUT ACCEPT
 iptables -A INPUT -m conntrack --ctstate INVALID -j DROP  
 
 # deny null packages
-iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
+# iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
 
 # deny bad tcp packages
-iptables -A INPUT -p tcp ! --syn -m conntrack --ctstate NEW -j DROP
-iptables -A OUTPUT -p tcp ! --syn -m conntrack --ctstate NEW -j DROP
+# iptables -A INPUT -p tcp ! --syn -m conntrack --ctstate NEW -j DROP
+# iptables -A OUTPUT -p tcp ! --syn -m conntrack --ctstate NEW -j DROP
 
 # allow lo
 iptables -A INPUT -i lo -j ACCEPT
@@ -53,3 +47,9 @@ iptables -A INPUT -p tcp -i $DEV -s $HOST_IP --dport $SSH_PORT -j ACCEPT
 # allow http, https for web-server
 iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+
+# enable dos protection
+iptables -N dos
+iptables -A dos -m recent --update --seconds 60 --hitcount 3 -j DROP
+iptables -A dos -m recent --set -j ACCEPT
+iptables -A INPUT -m conntrack --ctstate NEW -p tcp -m multiport --dports $SSH_PORT,80,443 -j dos
