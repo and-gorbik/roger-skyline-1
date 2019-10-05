@@ -20,7 +20,7 @@
 - [Настройка защиты](#protection)
 	- [Iptables](#iptables)
 	- [Защита от сканирования портов](#noscan)
-	- [Защита от DDOS](#noddos)
+	- [Защита от DOS](#nodos)
 - [Полезные ссылки](#srcs)
 
 ## Настройка VM <a id=VM></a>
@@ -206,7 +206,7 @@ iptables -A INPUT -p tcp -m multiport ! --dports $SSH_PORT,80,443 -m recent --se
 ```
 Любой пакет, идущий не на 2222,80,443 порты, добавляет его отправителя (ip-адрес) в бан-лист с именем `fuckoff`. Следующие 120 секунд будут блокироваться все пакеты, исходящие с данного ip.
 
-### Защита от DDOS <a id=noddos></a>
+### Защита от DOS <a id=nodos></a>
 Добавить в iptables следующие правила:
 ```bash
 iptables -N brute_check
